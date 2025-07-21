@@ -1,0 +1,32 @@
+/* modealCss */
+.modal-open-button {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background 0.2s;
+}
+.modal-open-button:hover {
+  background: #b71c1c;
+}
+
+.modal-submit-button {
+  background: #111;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.05rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+.modal-submit-button:hover {
+  background: #fff;
+  color: #d32f2f;
+}

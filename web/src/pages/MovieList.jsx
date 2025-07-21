@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MovieList.css";
 
+import AddMovieModal from "../components/AddMovieModal"; // Import the AddMovieModal component
+
 function MovieList() {
   const [movies, setMovies] = useState([]);
   const [directors, setDirectors] = useState([]);
@@ -9,7 +11,8 @@ function MovieList() {
   const [selectedDirector, setSelectedDirector] = useState("All");
   const [selectedGenre, setSelectedGenre] = useState("All");
 
-  useEffect(() => {
+  // Define fetchMovies function
+  const fetchMovies = () => {
     fetch("http://localhost:3001/api/movies")
       .then((res) => res.json())
       .then((data) => {
@@ -23,6 +26,10 @@ function MovieList() {
           ...Array.from(new Set(data.map((m) => m.genre))).sort(),
         ]);
       });
+  };
+
+  useEffect(() => {
+    fetchMovies();
   }, []);
 
   const filteredMovies = movies.filter((movie) => {
@@ -40,7 +47,9 @@ function MovieList() {
 
   return (
     <div className="page-container">
-      <div className="movie-list-header">Movies</div>
+      <div className="movie-list-header">Movies
+        <AddMovieModal onMovieAdded={fetchMovies} />
+      </div>
       <div className="filter-bar">
         <select
           className="filter-btn"
@@ -89,6 +98,7 @@ function MovieList() {
             </div>
           </Link>
         ))}
+        
       </div>
     </div>
   );
