@@ -1,35 +1,37 @@
-// movieList.jsx
+// web/src/components/MovieList.jsx - Displays all movies (based on 4-C TapeList)
 
-// ===== File: web/src/components/MovieList.jsx =====
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import AddMovieModal from "../components/AddMovieModal";
 
-const API_URL = "http://localhost:3001/api/movies";
-
-export default function MovieList() {
+function MovieList() {
   const [movies, setMovies] = useState([]);
 
+  // Fetch all movies from API
+  const fetchMovies = async () => {
+    const res = await fetch("http://localhost:3001/api/movies");
+    const data = await res.json();
+    setMovies(data);
+  };
+
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => setMovies(data));
+    fetchMovies();
   }, []);
 
   return (
     <div>
-      <div className="movie-list-header">
-        <h2>Movie Collection</h2>
-        <button className="add-movie-btn">Add Movie</button>
-      </div>
-      <div className="movie-cards">
+      <h2>Movies</h2>
+      <AddMovieModal onMovieAdded={fetchMovies} />
+      <div className="movie-list">
         {movies.map((movie) => (
           <div key={movie.id} className="movie-card">
             <img
-              src={`http://localhost:3001/images/${movie.image}`}
+              src={`http://localhost:3001/uploads/${movie.image}`}
               alt={movie.title}
+              className="movie-poster"
             />
             <div className="movie-title">{movie.title}</div>
             <div className="movie-meta">
-              {movie.director} &middot; {movie.genre}
+              Director: {movie.director} | Genre: {movie.genre}
             </div>
           </div>
         ))}
@@ -37,3 +39,5 @@ export default function MovieList() {
     </div>
   );
 }
+
+export default MovieList;

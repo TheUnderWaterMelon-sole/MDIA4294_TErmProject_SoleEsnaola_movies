@@ -1,18 +1,26 @@
 // server.js
 
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const moviesRouter = require('./routes/movies');
-
-app.use(cors());
-app.use(express.json());
-// Serve static images from public/images
-app.use('/images', express.static('public/images'));
-
-app.use('/api/movies', moviesRouter);
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const PORT = 3001;
+
+// Use the new 'routers' folder for your routers
+const moviesRouter = require("./routers/movies");
+const storageRouter = require("./routers/storage");
+
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+
+// Serve uploaded images as static files
+app.use("/uploads", express.static("uploads"));
+
+app.use("/api/movies", moviesRouter);
+app.use("/api/storage", storageRouter);
+
 app.listen(PORT, () => {
-  console.log(`API server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

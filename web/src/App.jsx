@@ -1,16 +1,17 @@
-// app.jsx
-import React from "react";
-import Header from "./components/Header";
-import MovieList from "./components/MovieList";
+// web/src/App.jsx - Main React app entry (based on 4-C App.jsx)
+
+import MovieList from "./pages/MovieList";
+import MovieDetail from "./pages/MovieDetail";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 function App() {
   return (
-    <>
-      <Header />
+    <div className="app-container">
+      <Header/>
       <MovieList />
-      <Footer />
-    </>
+      <Footer/>
+    </div>
   );
 }
 
