@@ -1,58 +1,34 @@
-// MovieLiest.jsx
+//web/MovieList.jsx
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import MovieFilter from './MovieFilter';
+import React, { useEffect, useState } from 'react';
 
-const MovieList = () => {
+// MovieList is the home page. It fetches and displays all movies.
+const API_URL = 'http://localhost:3001/api/movies';
+
+export default function MovieList() {
   const [movies, setMovies] = useState([]);
-  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/movies')
+    fetch(API_URL)
       .then(res => res.json())
-      .then(data => {
-        setMovies(data);
-        setFiltered(data);
-      });
+      .then(data => setMovies(data));
   }, []);
-
-  const handleFilter = (type, value) => {
-    if (!value) {
-      setFiltered(movies);
-      return;
-    }
-    setFiltered(movies.filter(m => m[type].toLowerCase().includes(value.toLowerCase())));
-  };
-
-  const handleDelete = (id) => {
-    fetch(`http://localhost:3001/api/movies/${id}`, {
-      method: 'DELETE'
-    })
-    .then(res => res.json())
-    .then(() => {
-      setFiltered(filtered.filter(m => m.id !== id));
-      setMovies(movies.filter(m => m.id !== id));
-    });
-  };
 
   return (
     <div>
-      <h2>All Movies</h2>
-      <MovieFilter onFilter={handleFilter} />
-      <Link to="/add">Add Movie</Link>
-      <ul>
-        {filtered.map(movie => (
-          <li key={movie.id}>
-            <img src={`/images/${movie.image}`} alt={movie.title} width="100" />
-            <Link to={`/movie/${movie.id}`}>{movie.title}</Link>
-            <button onClick={() => handleDelete(movie.id)}>Delete</button>
-            <Link to={`/edit/${movie.id}`}>Edit</Link>
-          </li>
+      <div className="movie-list-header">
+        <h2>Movie Collection</h2>
+        <button className="add-movie-btn">Add Movie</button>
+      </div>
+      <div className="movie-cards">
+        {movies.map(movie => (
+          <div key={movie.id} className="movie-card">
+            <img src={`/images/${movie.image}`} alt={movie.title} />
+            <div className="movie-title">{movie.title}</div>
+            <div className="movie-meta">{movie.director} &middot; {movie.genre}</div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
-};
-
-export default MovieList;
+}

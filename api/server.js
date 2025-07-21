@@ -7,6 +7,8 @@ const moviesRouter = require('./routes/movies');
 
 app.use(cors());
 app.use(express.json());
+// Serve static images from public/images
+app.use('/images', express.static('public/images'));
 
 app.use('/api/movies', moviesRouter);
 
