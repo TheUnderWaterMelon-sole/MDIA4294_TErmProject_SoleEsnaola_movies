@@ -1,0 +1,95 @@
+/* MovieList.css - Styles for MovieList page (CineVerse theme) */
+
+.page-container {
+  min-height: 100vh;
+  background: #181312;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 2rem;
+  box-sizing: border-box;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.movie-list-header {
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 2.2rem;
+  letter-spacing: 0.02em;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-btn {
+  background: #3c2f28;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #6e5d51;
+}
+
+.movie-list-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.3rem 2.2rem;
+}
+
+.movie-card {
+  background: #23201e;
+  border-radius: 1rem;
+  padding: 0.9rem 0.9rem 0.5rem 0.9rem;
+  width: 210px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.11);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, border 0.2s;
+  border: 3px solid transparent;
+}
+
+.movie-card:hover {
+  box-shadow: 0 10px 36px rgba(0,0,0,0.17);
+  border: 3px solid #f3e6c8;
+}
+
+.movie-poster {
+  width: 180px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 0.7rem;
+  margin-bottom: 1.1rem;
+  background: #151010;
+  border: 4px solid #23201e;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.movie-title {
+  color: #fff;
+  font-size: 1.13rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.movie-meta {
+  color: #d6cfc7;
+  font-size: 0.97rem;
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}

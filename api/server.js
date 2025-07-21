@@ -8,7 +8,7 @@ const PORT = 3001;
 
 // Use the new 'routers' folder for your routers
 const moviesRouter = require("./routers/movies");
-const storageRouter = require("./routers/storage");
+const genreRouter = require("./routers/genre");
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/movies", moviesRouter);
-app.use("/api/storage", storageRouter);
+app.use("/api/genre", genreRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
