@@ -6,16 +6,16 @@ import Header from "./components/Header";
 
 function App() {
   return (
-    <div className="app-container">
-      <Router>
+    <Router>
+      <div className="app-container">
         <Header />
         <Routes>
           <Route path="/" element={<MovieList />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
         </Routes>
         <Footer />
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 

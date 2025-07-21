@@ -1,13 +1,13 @@
-// api/routes/movies.js - CRUD routes for movies (based on 4-C, adapted for movies, directors, genres)
+// api/routes/movies.js - CRUD routes for movies (with description support)
 
 const express = require("express");
 const db = require("../db");
 const router = express.Router();
 
-// GET all movies (with director and genre via JOIN)
+// GET all movies (with director, genre, description via JOIN)
 router.get("/", (req, res) => {
   const sql = `
-    SELECT mt.id, mt.title, mt.image, mi.director, mi.genre
+    SELECT mt.id, mt.title, mt.image, mi.director, mi.genre, mi.description
     FROM movie_title mt
     JOIN movie_info mi ON mt.id = mi.movie_id
     ORDER BY mt.id DESC
@@ -18,10 +18,10 @@ router.get("/", (req, res) => {
   });
 });
 
-// GET single movie by id
+// GET single movie by id (with description)
 router.get("/:id", (req, res) => {
   const sql = `
-    SELECT mt.id, mt.title, mt.image, mi.director, mi.genre
+    SELECT mt.id, mt.title, mt.image, mi.director, mi.genre, mi.description
     FROM movie_title mt
     JOIN movie_info mi ON mt.id = mi.movie_id
     WHERE mt.id = ?
@@ -34,9 +34,9 @@ router.get("/:id", (req, res) => {
 });
 
 // CREATE a new movie (movie_title + movie_info)
-// Expects: { title, image, director, genre }
+// Expects: { title, image, director, genre, description }
 router.post("/", (req, res) => {
-  const { title, image, director, genre } = req.body;
+  const { title, image, director, genre, description } = req.body;
   db.beginTransaction(err => {
     if (err) return res.status(500).json({ error: err.message });
     db.query(
@@ -46,13 +46,13 @@ router.post("/", (req, res) => {
         if (err) return db.rollback(() => res.status(500).json({ error: err.message }));
         const movieId = result.insertId;
         db.query(
-          "INSERT INTO movie_info (movie_id, director, genre) VALUES (?, ?, ?)",
-          [movieId, director, genre],
+          "INSERT INTO movie_info (movie_id, director, genre, description) VALUES (?, ?, ?, ?)",
+          [movieId, director, genre, description],
           (err2) => {
             if (err2) return db.rollback(() => res.status(500).json({ error: err2.message }));
             db.commit(err3 => {
               if (err3) return db.rollback(() => res.status(500).json({ error: err3.message }));
-              res.status(201).json({ id: movieId, title, image, director, genre });
+              res.status(201).json({ id: movieId, title, image, director, genre, description });
             });
           }
         );
@@ -62,9 +62,9 @@ router.post("/", (req, res) => {
 });
 
 // UPDATE a movie (both tables)
-// Expects: { title, image, director, genre }
+// Expects: { title, image, director, genre, description }
 router.put("/:id", (req, res) => {
-  const { title, image, director, genre } = req.body;
+  const { title, image, director, genre, description } = req.body;
   db.beginTransaction(err => {
     if (err) return res.status(500).json({ error: err.message });
     db.query(
@@ -73,13 +73,13 @@ router.put("/:id", (req, res) => {
       (err) => {
         if (err) return db.rollback(() => res.status(500).json({ error: err.message }));
         db.query(
-          "UPDATE movie_info SET director = ?, genre = ? WHERE movie_id = ?",
-          [director, genre, req.params.id],
+          "UPDATE movie_info SET director = ?, genre = ?, description = ? WHERE movie_id = ?",
+          [director, genre, description, req.params.id],
           (err2) => {
             if (err2) return db.rollback(() => res.status(500).json({ error: err2.message }));
             db.commit(err3 => {
               if (err3) return db.rollback(() => res.status(500).json({ error: err3.message }));
-              res.json({ id: req.params.id, title, image, director, genre });
+              res.json({ id: req.params.id, title, image, director, genre, description });
             });
           }
         );

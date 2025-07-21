@@ -1,6 +1,7 @@
+// web/pages/MovieDetail.jsx
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import "./MovieList.css"; // Reusing MovieList styles for consistent look
+import "./MovieList.css";
 
 function MovieDetail() {
     const { id } = useParams();
@@ -26,14 +27,14 @@ function MovieDetail() {
                 }}>
                     <img
                         className="movie-poster"
-                        src={`http://localhost:3001/uploads/${movieData.image}`}
+                        src={`http://localhost:3001/images/${movieData.image}`}
                         alt={movieData.title}
                         style={{ width: "100%", borderRadius: "0.7rem", background: "#151010" }}
                     />
                 </div>
                 <div style={{ flex: 1 }}>
                     <Link to='/' className="filter-btn" style={{ marginBottom: "2rem", display: "inline-block" }}>
-                        &lt; All Movies
+                        &lt; Movie List
                     </Link>
                     <h1 className="movie-title" style={{ fontSize: "2.2rem", margin: "1rem 0 0.6rem 0", textAlign: "left" }}>
                         {movieData.title}

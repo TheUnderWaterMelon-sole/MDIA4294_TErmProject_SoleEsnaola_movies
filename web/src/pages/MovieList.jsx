@@ -1,6 +1,5 @@
-// MovieList.jsx - Movie listing page styled like CineVerse
-
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./MovieList.css";
 
 function MovieList() {
@@ -10,13 +9,11 @@ function MovieList() {
   const [selectedDirector, setSelectedDirector] = useState("All");
   const [selectedGenre, setSelectedGenre] = useState("All");
 
-  // Fetch movies from API
   useEffect(() => {
     fetch("http://localhost:3001/api/movies")
       .then((res) => res.json())
       .then((data) => {
         setMovies(data);
-        // Get unique directors and genres for the filter dropdowns
         setDirectors([
           "All",
           ...Array.from(new Set(data.map((m) => m.director))).sort(),
@@ -28,13 +25,18 @@ function MovieList() {
       });
   }, []);
 
-  // Filtering logic
   const filteredMovies = movies.filter((movie) => {
     const directorMatch =
       selectedDirector === "All" || movie.director === selectedDirector;
     const genreMatch = selectedGenre === "All" || movie.genre === selectedGenre;
     return directorMatch && genreMatch;
   });
+
+  // Handler to clear both filters
+  const handleClearFilters = () => {
+    setSelectedDirector("All");
+    setSelectedGenre("All");
+  };
 
   return (
     <div className="page-container">
@@ -62,24 +64,30 @@ function MovieList() {
             </option>
           ))}
         </select>
+        <button
+          className="filter-btn"
+          style={{ marginLeft: "1rem" }}
+          onClick={handleClearFilters}
+        >
+          Clear Filters
+        </button>
       </div>
       <div className="movie-list-grid">
         {filteredMovies.map((movie) => (
-          <div className="movie-card" key={movie.id}>
-            {/* Movie Poster */}
-            <img
-              className="movie-poster"
-              src={`http://localhost:3001/uploads/${movie.image}`}
-              alt={movie.title}
-            />
-            {/* Movie Title */}
-            <div className="movie-title">{movie.title}</div>
-            {/* Movie Details */}
-            <div className="movie-meta">
-              Director: {movie.director} <br />
-              Genre: {movie.genre}
+          <Link to={`/movies/${movie.id}`} key={movie.id} style={{ textDecoration: "none" }}>
+            <div className="movie-card">
+              <img
+                className="movie-poster"
+                src={`http://localhost:3001/images/${movie.image}`}
+                alt={movie.title}
+              />
+              <div className="movie-title">{movie.title}</div>
+              <div className="movie-meta">
+                Director: {movie.director} <br />
+                Genre: {movie.genre}
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

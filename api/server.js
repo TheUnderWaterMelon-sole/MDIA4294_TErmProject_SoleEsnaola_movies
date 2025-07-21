@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Serve uploaded images as static files
-app.use("/uploads", express.static("uploads"));
+app.use(express.static("public"));
 
 app.use("/api/movies", moviesRouter);
 app.use("/api/genre", genreRouter);
