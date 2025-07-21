@@ -1,31 +1,43 @@
 //web/MovieList.jsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import AddMovieModal from "./AddMovieModal";
 
-// MovieList is the home page. It fetches and displays all movies.
-const API_URL = 'http://localhost:3001/api/movies';
+const API_URL = "http://localhost:3001/api/movies";
 
 export default function MovieList() {
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
+  // Fetch movies from the API
+  const fetchMovies = () => {
     fetch(API_URL)
-      .then(res => res.json())
-      .then(data => setMovies(data));
+      .then((res) => res.json())
+      .then((data) => setMovies(data));
+  };
+
+  useEffect(() => {
+    fetchMovies();
   }, []);
 
   return (
     <div>
       <div className="movie-list-header">
         <h2>Movie Collection</h2>
-        <button className="add-movie-btn">Add Movie</button>
+        <AddMovieModal onMovieAdded={fetchMovies} />
       </div>
       <div className="movie-cards">
-        {movies.map(movie => (
+        {movies.map((movie) => (
           <div key={movie.id} className="movie-card">
-            <img src={`/images/${movie.image}`} alt={movie.title} />
+            <img
+              src={`http://localhost:3001/images/${movie.image}`}
+              alt={movie.title}
+              style={{ width: "180px", height: "260px", objectFit: "cover", borderRadius: "12px", background: "#fff" }}
+              onError={e => { e.target.src = "/fallback.jpg"; }}
+            />
             <div className="movie-title">{movie.title}</div>
-            <div className="movie-meta">{movie.director} &middot; {movie.genre}</div>
+            <div className="movie-meta">
+              {movie.director} &middot; {movie.genre}
+            </div>
           </div>
         ))}
       </div>
