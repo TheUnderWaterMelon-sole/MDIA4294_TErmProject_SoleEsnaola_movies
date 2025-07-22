@@ -1,29 +1,23 @@
-// api/storage.js - Handles file uploads (based on 4-C, adapted for movies)
-
-const express = require("express");
+// multer is a middleware for handling file uploads.
 const multer = require("multer");
-const path = require("path");
-const router = express.Router();
 
-// Configure Multer for image uploads
+// Configure multer for file uploads so we can store items later on
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    // Save the file with its original name
-    cb(null, file.originalname);
-  },
+	// Set the destination for uploaded files
+	destination: (req, file, cb) => {
+		// 'public/images' is the directory where files will be stored, because we are using the 'public' folder as a static folder
+		cb(null, "public/images");
+	},
+	// Set the filename for uploaded files
+	filename: (req, file, cb) => {
+		// Use the current timestamp and the original file name to create a unique filename
+		//    @NOTE: This is a simple way to avoid filename conflicts
+		cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+	},
 });
+
+// Create the upload middleware with the storage configuration above
 const upload = multer({ storage: storage });
 
-// POST /api/storage/upload - upload a movie poster image
-router.post("/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No file uploaded" });
-  }
-  // Respond with the file path for storage in the database
-  res.json({ filename: req.file.filename, url: `/uploads/${req.file.filename}` });
-});
-
-module.exports = router;
+// Export the upload middleware to be used in other files
+module.exports = upload;
