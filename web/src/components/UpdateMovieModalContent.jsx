@@ -73,9 +73,14 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 	};
 
 	return (
-		<div className={m["modal-container"]}>
+		<div className={m["modalOverlay"]}>
 			<div className={`${m["modal"]} ${g["card"]}`}>
-				<h3>Edit Movie</h3>
+				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+					<h3 style={{ margin: 0 }}>Edit Movie</h3>
+					<button onClick={onClose} className={m["modal__close-button"]} style={{ position: 'static', padding: '0.3125rem' }}>
+						❌
+					</button>
+				</div>
 				<form
 					action=''
 					className={`${g["form-group"]} ${g["grid-container"]}`}
@@ -113,13 +118,26 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 								))}
 						</select>
 
-						<label htmlFor='description'>Description</label>
-						<textarea
-							name='description'
-							id='description'
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						></textarea>
+						<img
+							src={`http://localhost:3000/images/${movie.image_name}`}
+							alt='Current movie poster'
+							style={{
+								width: '100%',
+								maxWidth: '8rem',
+								height: 'auto',
+								borderRadius: '0.375rem',
+								marginBottom: '0.5rem',
+								marginTop: '0.5rem'
+							}}
+						/>
+
+						<label htmlFor='image'>Upload New Image</label>
+						<input
+							type='file'
+							name='image'
+							id='image'
+							onChange={(e) => setImage(e.target.files[0])}
+						/>
 					</div>
 					<div className={g["col-8"]}>
 						<label htmlFor='title'>Title</label>
@@ -130,28 +148,27 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 							value={title}
 							onChange={(e) => setTitle(e.target.value)}
 						/>
-						<label>Current Image</label>
-						<img
-							src={`http://localhost:3000/images/${movie.image_name}`}
-							alt='Placeholder'
-						/>
-						<label htmlFor='image'>Upload New Image</label>
-						<input
-							type='file'
-							name='image'
-							id='image'
-							onChange={(e) => setImage(e.target.files[0])}
-						/>
-					</div>
-					<div className={g["col-12"]}>
-						<button className={`${g["button"]} ${g["success"]}`} type='submit'>
-							Save
-						</button>
+
+						<label htmlFor='description'>Description</label>
+						<textarea
+							name='description'
+							id='description'
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+							style={{
+								minHeight: '8rem',
+								width: '100%',
+								boxSizing: 'border-box'
+							}}
+						></textarea>
+
+						<div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.75rem' }}>
+							<button className={`${g["button"]} ${g["success"]}`} type='submit'>
+								Save
+							</button>
+						</div>
 					</div>
 				</form>
-				<button onClick={onClose} className={m["modal__close-button"]}>
-					❌
-				</button>
 			</div>
 		</div>
 	);

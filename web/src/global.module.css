@@ -243,7 +243,7 @@ button {
 
 /* Button variants for different actions */
 .success {
-  background: #28a745;
+  background: #ff7f7f;
 }
 
 .success:hover {
