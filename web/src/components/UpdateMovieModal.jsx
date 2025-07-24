@@ -1,6 +1,6 @@
 // updateMovieModal.jsx
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom"
 import UpdateMovieModalContent from "./UpdateMovieModalContent";
 

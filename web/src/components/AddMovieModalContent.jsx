@@ -1,49 +1,56 @@
-// src/components/AddMovieModalContent.jsx
+/**
+ * AddMovieModalContent Component
+ * Advanced form component for adding new movies with dynamic director/genre creation
+ * Features: file upload, new director/genre creation, form validation
+ * 
+ * Props:
+ * - onMovieAdded: Callback function triggered when a movie is successfully added
+ * - onClose: Callback function to close the modal
+ */
+
 import { useState, useEffect } from "react";
 
 import m from "./AddMovieModalContent.module.css";
 import g from "../global.module.css";
 
 function AddMovieModalContent({ onMovieAdded, onClose }) {
-	// Used to store the director id and genre id
+	// State for selected director and genre IDs from database
 	const [director, setDirector] = useState("");
 	const [genre, setGenre] = useState("");
 	const [dbDirectors, setDbDirectors] = useState([]);
 	const [dbGenres, setDbGenres] = useState([]);
 
-	// Used to store the title, image and description from the form
+	// Form input states for movie data
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [image, setImage] = useState(null);
 
-	// State to handle adding new director
+	// States for creating new directors and genres dynamically
 	const [isNewDirector, setIsNewDirector] = useState(false);
 	const [newDirector, setNewDirector] = useState("");
-
-	// State to handle adding new genre
 	const [isNewGenre, setIsNewGenre] = useState(false);
 	const [newGenre, setNewGenre] = useState("");
 
-	// Load the directors and genres from the API
+	// Load existing directors and genres from the API on component mount
 	useEffect(() => {
-		// Fetch directors
+		// Fetch directors from database
 		fetch("http://localhost:3000/api/directors")
 			.then((res) => res.json())
 			.then((data) => {
 				setDbDirectors(data);
-				// If there are directors in the database and no director is selected, set the first director as the default
-				if (data.length > 0 && !director) {
+				// Set first director as default if available
+				if (data.length > 0) {
 					setDirector(data[0].id);
 				}
 			});
 
-		// Fetch genres
+		// Fetch genres from database
 		fetch("http://localhost:3000/api/genres")
 			.then((res) => res.json())
 			.then((data) => {
 				setDbGenres(data);
-				// If there are genres in the database and no genre is selected, set the first genre as the default
-				if (data.length > 0 && !genre) {
+				// Set first genre as default if available
+				if (data.length > 0) {
 					setGenre(data[0].id);
 				}
 			});
@@ -71,6 +78,7 @@ function AddMovieModalContent({ onMovieAdded, onClose }) {
 		}
 	};
 
+	// Event handler for form submission with director/genre creation logic
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 
@@ -79,27 +87,23 @@ function AddMovieModalContent({ onMovieAdded, onClose }) {
 
 		// Create a new director before creating the movie
 		if (isNewDirector) {
-			const directorResponse = await fetch("http://localhost:3000/api/directors", {
+			await fetch("http://localhost:3000/api/directors", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ name: newDirector }),
 			});
 
-			// Get the new director data from the response
-			const directorData = await directorResponse.json();
 			directorId = newDirector; // Use the name directly for new directors
 		}
 
 		// Create a new genre before creating the movie
 		if (isNewGenre) {
-			const genreResponse = await fetch("http://localhost:3000/api/genres", {
+			await fetch("http://localhost:3000/api/genres", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ name: newGenre }),
 			});
 
-			// Get the new genre data from the response
-			const genreData = await genreResponse.json();
 			genreId = newGenre; // Use the name directly for new genres
 		}
 

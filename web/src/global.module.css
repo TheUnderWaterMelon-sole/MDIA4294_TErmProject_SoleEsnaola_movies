@@ -1,3 +1,8 @@
+/* 
+ * global.module.css - Global styles and CSS variables for the movie application
+ * Contains shared styles, responsive design, typography, and component styling
+ */
+
 /* global.module.css */
 .app {
   background: #191716;
@@ -6,6 +11,7 @@
   font-family: 'Roboto', sans-serif;
 }
 
+/* Navigation bar - consistent across all pages */
 .navbar {
   display: flex;
   align-items: center;
@@ -81,7 +87,7 @@
   display: flex;
   overflow: hidden;
   color: #f6f2e8;
-  max-width: 720px;
+  max-width: 25%;
 }
 .detailPoster {
   width: 320px;
@@ -120,7 +126,7 @@
   line-height: 1.6;
 }
 
-/* Container with 5rem margins on both sides */
+/* Container with responsive margins for consistent spacing */
 .container {
   margin: 0 5rem;
   width: calc(100% - 10rem);
@@ -139,20 +145,26 @@
     margin: 0 1.5rem;
     width: calc(100% - 3rem);
   }
-  
+
+  /* Stack navbar elements vertically on mobile */
   .navbar {
     padding: 15px 1.5rem;
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .navLinks {
     gap: 20px;
   }
 }
 
-/* Typography Styles */
-h1, h2, h3, h4, h5, h6 {
+/* Typography hierarchy using Montserrat for headings, Roboto for body text */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
 }
@@ -172,7 +184,13 @@ h3 {
   font-weight: 600;
 }
 
-p, span, div, input, textarea, select, button {
+p,
+span,
+div,
+input,
+textarea,
+select,
+button {
   font-family: 'Roboto', sans-serif;
 }
 
@@ -181,7 +199,7 @@ button {
   font-weight: 500;
 }
 
-/* Form and Grid Styles */
+/* 12-column grid system for responsive layouts */
 .form-group {
   width: 100%;
 }
@@ -205,9 +223,10 @@ button {
   grid-column: span 12;
 }
 
+/* Base button styling with blue theme */
 .button {
-  background: #4a9eff;
-  color: white;
+  background: #ff7f7f;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 6px;
   padding: 12px 24px;
@@ -219,9 +238,10 @@ button {
 }
 
 .button:hover {
-  background: #3a8eef;
+  background: #060606;
 }
 
+/* Button variants for different actions */
 .success {
   background: #28a745;
 }
@@ -230,20 +250,23 @@ button {
   background: #2d8a65;
 }
 
+/* Smaller button size for compact spaces */
 .small {
   padding: 6px 12px;
   font-size: 0.9rem;
 }
 
+/* Warning button for edit actions */
 .warning {
-  background: #f59e0b;
+  background: #ff7f7f;
   color: #fff;
 }
 
 .warning:hover {
-  background: #d97706;
+  background: #ff6b6b;
 }
 
+/* Delete button with dark theme */
 .delete {
   background: #040404;
   color: #ffffff;
@@ -253,7 +276,7 @@ button {
   background: #b91c1c;
 }
 
-/* Card styles */
+/* Card component styling for movie displays */
 .card {
   background: #221f1e;
   border-radius: 14px;
@@ -262,7 +285,7 @@ button {
   color: #f6f2e8;
 }
 
-/* Form input styles */
+/* Form input styling for consistent design across modals */
 .card input,
 .card textarea,
 .card select {
@@ -276,6 +299,7 @@ button {
   font-family: 'Roboto', sans-serif;
 }
 
+/* Form label styling */
 .card label {
   display: block;
   margin-bottom: 4px;
@@ -283,7 +307,7 @@ button {
   font-family: 'Roboto', sans-serif;
 }
 
-/* Footer styles - similar to navbar */
+/* Footer component - matches navbar design for consistency */
 .footer {
   display: flex;
   align-items: center;
@@ -295,6 +319,7 @@ button {
   margin-top: 4rem;
 }
 
+/* Footer logo styling */
 .footerLogo {
   display: flex;
   align-items: center;
@@ -305,6 +330,7 @@ button {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Footer copyright text */
 .footerCopy {
   color: #c7c2b3;
   font-size: 1rem;
@@ -312,7 +338,7 @@ button {
   font-family: 'Roboto', sans-serif;
 }
 
-/* Responsive footer */
+/* Responsive footer - stacks elements on mobile */
 @media (max-width: 768px) {
   .footer {
     padding: 15px 1.5rem;

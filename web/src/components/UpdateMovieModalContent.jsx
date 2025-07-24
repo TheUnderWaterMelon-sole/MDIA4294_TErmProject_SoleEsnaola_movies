@@ -39,6 +39,7 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 					setGenre(data[0].id);
 				}
 			});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleFormSubmit = async (event) => {
@@ -60,15 +61,15 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 			body: formData,
 		});
 
-		// Get the response from the API
-		const movieResult = await movieResponse.json();
+		// Check if the request was successful
+		if (movieResponse.ok) {
+			// Call the onMovieUpdated function that was passed as a prop
+			//    @NOTE: This is passed down from MovieList.jsx and just calls the fetchMovies function to repopulate the movies
+			onMovieUpdated();
 
-		// Call the onMovieUpdated function that was passed as a prop
-		//    @NOTE: This is passed down from MovieList.jsx and just calls the fetchMovies function to repopulate the movies
-		onMovieUpdated();
-
-		// Close the modal.
-		onClose();
+			// Close the modal.
+			onClose();
+		}
 	};
 
 	return (
@@ -90,9 +91,9 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 							onChange={(e) => setDirector(e.target.value)}
 						>
 							{dbDirectors &&
-								dbDirectors.map((director, index) => (
-									<option key={director.id} value={director.id}>
-										{director.name}
+								dbDirectors.map((directorItem) => (
+									<option key={directorItem.id} value={directorItem.id}>
+										{directorItem.name}
 									</option>
 								))}
 						</select>
@@ -105,9 +106,9 @@ function UpdateMovieModalContent({ onMovieUpdated, movie, onClose }) {
 							onChange={(e) => setGenre(e.target.value)}
 						>
 							{dbGenres &&
-								dbGenres.map((genre, index) => (
-									<option key={genre.id} value={genre.id}>
-										{genre.name}
+								dbGenres.map((genreItem) => (
+									<option key={genreItem.id} value={genreItem.id}>
+										{genreItem.name}
 									</option>
 								))}
 						</select>

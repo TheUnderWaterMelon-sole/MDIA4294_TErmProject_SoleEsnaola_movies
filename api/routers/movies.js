@@ -1,9 +1,24 @@
-// api/routers/movies.js
+/**
+ * Movies Router - Express.js router handling all movie-related API endpoints
+ *
+ * Endpoints:
+ * - GET /api/movies - Retrieve all movies with director and genre info
+ * - GET /api/movies/:id - Get specific movie by ID
+ * - POST /api/movies - Create new movie with image upload
+ * - PUT /api/movies/:id - Update existing movie
+ * - DELETE /api/movies/:id - Delete movie and associated data
+ *
+ * Database Schema:
+ * - movie_title table: id, title, image
+ * - movie_info table: movie_id (FK), director, genre, description
+ */
+
 const express = require('express');
 const moviesRouter = express.Router();
 const db = require('../db');
 const upload = require('../storage');
 
+// GET /api/movies - Retrieve all movies with joined movie info
 moviesRouter.get('/', (req, res) => {
   const sql = `
         SELECT 
@@ -27,7 +42,7 @@ moviesRouter.get('/', (req, res) => {
   });
 });
 
-// Get a single movie from the database
+// GET /api/movies/:id - Get a single movie from the database
 moviesRouter.get('/:id', (req, res) => {
   // Get the id from the URL
   const { id } = req.params;
@@ -54,14 +69,15 @@ moviesRouter.get('/:id', (req, res) => {
   });
 });
 
+// POST /api/movies - Create new movie with file upload support
 moviesRouter.post('/', upload.single('image'), (req, res) => {
-  // Get the director, genre, title and description from the request body
+  // Extract movie data from request body
   const { director_id, genre_id, title, description } = req.body;
 
-  // The uploaded file's filename is stored in 'req.file.filename'
+  // Handle uploaded image file
   const image = req.file ? req.file.filename : null;
 
-  // Check if director_id and genre_id are numeric (existing) or text (new)
+  // Determine if director/genre are new (text) or existing (numeric ID)
   const isDirectorNew = isNaN(director_id);
   const isGenreNew = isNaN(genre_id);
 
@@ -90,7 +106,8 @@ moviesRouter.post('/', upload.single('image'), (req, res) => {
 
 // Helper function to get director name by ID
 function getDirectorName(director_id, callback) {
-  const directorsQuery = "SELECT DISTINCT director as name FROM movie_info ORDER BY director";
+  const directorsQuery =
+    'SELECT DISTINCT director as name FROM movie_info ORDER BY director';
   db.query(directorsQuery, (err, directors) => {
     if (err) {
       console.error(err);
@@ -103,7 +120,8 @@ function getDirectorName(director_id, callback) {
 
 // Helper function to get genre name by ID
 function getGenreName(genre_id, callback) {
-  const genresQuery = "SELECT DISTINCT genre as name FROM movie_info ORDER BY genre";
+  const genresQuery =
+    'SELECT DISTINCT genre as name FROM movie_info ORDER BY genre';
   db.query(genresQuery, (err, genres) => {
     if (err) {
       console.error(err);
@@ -118,7 +136,7 @@ function getGenreName(genre_id, callback) {
 function insertMovie(title, image, directorName, genreName, description, res) {
   // Insert into movie_title table first
   const addMovieTitleSQL = `INSERT INTO movie_title (title, image) VALUES (?, ?)`;
-  
+
   db.query(addMovieTitleSQL, [title, image], (err, titleResults) => {
     if (err) {
       console.error(err);
@@ -129,15 +147,23 @@ function insertMovie(title, image, directorName, genreName, description, res) {
 
     // Insert into movie_info table
     const addMovieInfoSQL = `INSERT INTO movie_info (movie_id, director, genre, description) VALUES (?, ?, ?, ?)`;
-    
-    db.query(addMovieInfoSQL, [movieId, directorName, genreName, description], (err, infoResults) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error adding movie info' });
-      }
 
-      res.status(200).json({ message: 'Movie added successfully', movieId: movieId });
-    });
+    db.query(
+      addMovieInfoSQL,
+      [movieId, directorName, genreName, description],
+      (err, infoResults) => {
+        if (err) {
+          console.error(err);
+          return res
+            .status(500)
+            .json({ error: 'Server error adding movie info' });
+        }
+
+        res
+          .status(200)
+          .json({ message: 'Movie added successfully', movieId: movieId });
+      }
+    );
   });
 }
 

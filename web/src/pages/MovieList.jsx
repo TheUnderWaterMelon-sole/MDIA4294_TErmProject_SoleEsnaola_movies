@@ -1,3 +1,9 @@
+/**
+ * MovieList Component
+ * Main page component displaying all movies in a responsive 3-column grid
+ * Features: movie filtering, add movie modal, edit/delete functionality
+ */
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
@@ -9,13 +15,16 @@ import m from "./MovieList.module.css";
 import g from "../global.module.css";
 
 function MovieList() {
+	// State management for movies and filtering
 	const [movies, setMovies] = useState([]);
 	const [filteredMovies, setFilteredMovies] = useState([]);
 
+	// Fetch movies on component mount
 	useEffect(() => {
 		fetchMovies();
 	}, []);
 
+	// API call to retrieve all movies from the database
 	const fetchMovies = async () => {
 		try {
 			const response = await fetch("http://localhost:3000/api/movies");
@@ -27,6 +36,7 @@ function MovieList() {
 		}
 	};
 
+	// Handle movie filtering by genre or director
 	const handleFilter = (type, value) => {
 		if (!value) {
 			setFilteredMovies(movies);
@@ -45,6 +55,7 @@ function MovieList() {
 		setFilteredMovies(filtered);
 	};
 
+	// Event handlers for CRUD operations - refresh movie list after changes
 	const handleMovieAdded = () => {
 		fetchMovies(); // Refresh the movie list when a new movie is added
 	};

@@ -15,7 +15,7 @@ function AddMovieModal({ onMovieAdded }) {
 		<div>
 			{/* Button to open the modal and set state to "true" */}
 			<button className={g["button"]} onClick={() => setShowModal(true)}>
-				+ Add Movie +
+				+ Add Movie
 			</button>
 			{/* This is called a "short-circuit" conditional: if "showModal" is true, anything after "&&" will run, if false, nothing happens */}
 			{showModal &&

@@ -1,8 +1,11 @@
 /* AddMovieModalContent.module.css */
 .modalOverlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(25,23,22,0.86);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(25, 23, 22, 0.86);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +15,7 @@
   background: #221f1e;
   padding: 32px 38px;
   border-radius: 14px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.32);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.32);
   color: #f6f2e8;
   min-width: 340px;
   max-width: 430px;
@@ -30,7 +33,9 @@ label {
   font-weight: 500;
   gap: 6px;
 }
-input, select, textarea {
+input,
+select,
+textarea {
   background: #312d2a;
   color: #f6f2e8;
   border: none;

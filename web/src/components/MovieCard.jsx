@@ -15,16 +15,9 @@ function MovieCard({ movie, onMovieUpdated, onMovieDeleted }) {
 			</div>
 			<div className={m.content}>
 				<h3 className={m.title}>{movie.name}</h3>
-				<p className={m.director}>Director: {movie.director}</p>
-				<p className={m.genre}>Genre: {movie.genre}</p>
-				{movie.description && (
-					<p className={m.description}>
-						{movie.description.length > 100 
-							? `${movie.description.substring(0, 100)}...` 
-							: movie.description
-						}
-					</p>
-				)}
+				<p className={m.director}><strong>Director:</strong> {movie.director}</p>
+				<p className={m.genre}><strong>Genre:</strong> {movie.genre}</p>
+				
 				<div className={m.actions} onClick={(e) => e.stopPropagation()}>
 					<UpdateMovieModal 
 						movie={movie} 
