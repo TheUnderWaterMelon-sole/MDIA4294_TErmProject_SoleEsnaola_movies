@@ -1,107 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "./MovieList.css";
+import { useState, useEffect } from "react";
+import { Link } from "react-router";
 
-import AddMovieModal from "../components/AddMovieModal"; // Import the AddMovieModal component
+import MovieCard from "../components/MovieCard";
+import AddMovieModal from "../components/AddMovieModal";
+import MovieFilter from "../components/MovieFilter";
+
+import m from "./MovieList.module.css";
+import g from "../global.module.css";
 
 function MovieList() {
-  const [movies, setMovies] = useState([]);
-  const [directors, setDirectors] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [selectedDirector, setSelectedDirector] = useState("All");
-  const [selectedGenre, setSelectedGenre] = useState("All");
+	const [movies, setMovies] = useState([]);
+	const [filteredMovies, setFilteredMovies] = useState([]);
 
-  // Define fetchMovies function
-  const fetchMovies = () => {
-    fetch("http://localhost:3001/api/movies")
-      .then((res) => res.json())
-      .then((data) => {
-        setMovies(data);
-        setDirectors([
-          "All",
-          ...Array.from(new Set(data.map((m) => m.director))).sort(),
-        ]);
-        setGenres([
-          "All",
-          ...Array.from(new Set(data.map((m) => m.genre))).sort(),
-        ]);
-      });
-  };
+	useEffect(() => {
+		fetchMovies();
+	}, []);
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
+	const fetchMovies = async () => {
+		try {
+			const response = await fetch("http://localhost:3000/api/movies");
+			const data = await response.json();
+			setMovies(data);
+			setFilteredMovies(data);
+		} catch (error) {
+			console.error("Error fetching movies:", error);
+		}
+	};
 
-  const filteredMovies = movies.filter((movie) => {
-    const directorMatch =
-      selectedDirector === "All" || movie.director === selectedDirector;
-    const genreMatch = selectedGenre === "All" || movie.genre === selectedGenre;
-    return directorMatch && genreMatch;
-  });
+	const handleFilter = (type, value) => {
+		if (!value) {
+			setFilteredMovies(movies);
+			return;
+		}
 
-  // Handler to clear both filters
-  const handleClearFilters = () => {
-    setSelectedDirector("All");
-    setSelectedGenre("All");
-  };
+		const filtered = movies.filter(movie => {
+			if (type === 'genre') {
+				return movie.genre.toLowerCase().includes(value.toLowerCase());
+			} else if (type === 'director') {
+				return movie.director.toLowerCase().includes(value.toLowerCase());
+			}
+			return true;
+		});
+		
+		setFilteredMovies(filtered);
+	};
 
-  return (
-    <div className="page-container">
-      <div className="movie-list-header">Movies
-        <AddMovieModal onMovieAdded={fetchMovies} />
-      </div>
-      <div className="filter-bar">
-        <select
-          className="filter-btn"
-          value={selectedDirector}
-          onChange={(e) => setSelectedDirector(e.target.value)}
-        >
-          {directors.map((director) => (
-            <option value={director} key={director}>
-              {director === "All" ? "Director" : director}
-            </option>
-          ))}
-        </select>
-        <select
-          className="filter-btn"
-          value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value)}
-        >
-          {genres.map((genre) => (
-            <option value={genre} key={genre}>
-              {genre === "All" ? "Genre" : genre}
-            </option>
-          ))}
-        </select>
-        <button
-          className="filter-btn"
-          style={{ marginLeft: "1rem" }}
-          onClick={handleClearFilters}
-        >
-          Clear Filters
-        </button>
-      </div>
-      <div className="movie-list-grid">
-        {filteredMovies.map((movie) => (
-          <Link to={`/movies/${movie.id}`} key={movie.id} style={{ textDecoration: "none" }}>
-            <div className="movie-card">
-              <img
-                className="movie-poster"
-                src={`http://localhost:3001/images/${movie.image}`}
-                alt={movie.title}
-              />
-              <div className="movie-title">{movie.title}</div>
-              <div className="movie-meta">
-                Director: {movie.director} <br />
-                Genre: {movie.genre}
-              </div>
-            </div>
-          </Link>
-        ))}
-        
-      </div>
-    </div>
-  );
+	const handleMovieAdded = () => {
+		fetchMovies(); // Refresh the movie list when a new movie is added
+	};
+
+	const handleMovieUpdated = () => {
+		fetchMovies(); // Refresh the movie list when a movie is updated
+	};
+
+	const handleMovieDeleted = () => {
+		fetchMovies(); // Refresh the movie list when a movie is deleted
+	};
+
+	return (
+		<main>
+			<div className={g.container}>
+				<div className={m.header}>
+					<h1>Movie Collection</h1>
+					<AddMovieModal onMovieAdded={handleMovieAdded} />
+				</div>
+				
+				<div className={m.filters}>
+					<MovieFilter onFilter={handleFilter} />
+				</div>
+
+				<div className={m.cardsGrid}>
+					{filteredMovies.map((movie) => (
+						<div key={movie.id} className={m.movieCardWrapper}>
+							<Link to={`/movies/${movie.id}`} className={m.movieLink}>
+								<MovieCard 
+									movie={movie} 
+									onMovieUpdated={handleMovieUpdated}
+									onMovieDeleted={handleMovieDeleted}
+								/>
+							</Link>
+						</div>
+					))}
+				</div>
+
+				{filteredMovies.length === 0 && (
+					<div>
+						<p>No movies found.</p>
+					</div>
+				)}
+			</div>
+		</main>
+	);
 }
 
 export default MovieList;

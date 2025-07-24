@@ -1,20 +1,24 @@
+// server.js
+
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const PORT = 3000;
 
+// You must require your routers before using them!
+const directorRouter = require("./routers/director");
 const moviesRouter = require("./routers/movies");
 const genreRouter = require("./routers/genre");
-const directorRouter = require("./routers/director"); // Moved up here
-
-const app = express();
-const PORT = 3001;
 
 app.use(cors());
-app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(bodyParser.json());
 
+app.use("/api/directors", directorRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/genres", genreRouter);
-app.use("/api/directors", directorRouter); // Now works!
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+	console.log(`Access this app at http://localhost:${PORT}/ `);
+});

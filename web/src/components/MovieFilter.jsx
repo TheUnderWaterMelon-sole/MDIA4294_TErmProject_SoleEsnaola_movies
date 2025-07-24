@@ -1,5 +1,6 @@
 // MovieFilter.jsx
 import React, { useState } from 'react';
+import styles from '../pages/MovieList.module.css';
 
 const MovieFilter = ({ onFilter }) => {
   const [type, setType] = useState('genre');
@@ -11,8 +12,12 @@ const MovieFilter = ({ onFilter }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <select value={type} onChange={e => setType(e.target.value)}>
+    <form onSubmit={handleSubmit} className={styles.filterForm}>
+      <select 
+        value={type} 
+        onChange={e => setType(e.target.value)}
+        className={styles.filterSelect}
+      >
         <option value="genre">Genre</option>
         <option value="director">Director</option>
       </select>
@@ -21,8 +26,9 @@ const MovieFilter = ({ onFilter }) => {
         placeholder={`Filter by ${type}`}
         value={value}
         onChange={e => setValue(e.target.value)}
+        className={styles.filterInput}
       />
-      <button type="submit">Filter</button>
+      <button type="submit" className={styles.filterButton}>Filter</button>
     </form>
   );
 };

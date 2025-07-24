@@ -1,55 +1,82 @@
-// web/pages/MovieDetail.jsx
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import "./MovieList.css";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
+import UpdateMovieModal from "../components/UpdateMovieModal";
+import DeleteMovieModal from "../components/DeleteMovieModal";
+
+import m from "./MovieDetail.module.css";
 
 function MovieDetail() {
-    const { id } = useParams();
-    const [movieData, setMovieData] = useState({});
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const [movie, setMovie] = useState(null);
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/api/movies/${id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setMovieData(data);
-            });
-    }, [id]);
+	useEffect(() => {
+		fetchMovie();
+	}, [id]);
 
-    return (
-        <main className="page-container">
-            <div style={{ display: "flex", gap: "2.5rem", alignItems: "flex-start" }}>
-                <div style={{
-                    flex: "0 0 280px",
-                    background: "#23201e",
-                    borderRadius: "1rem",
-                    padding: "1.5rem",
-                    boxShadow: "0 6px 24px rgba(0,0,0,0.11)"
-                }}>
-                    <img
-                        className="movie-poster"
-                        src={`http://localhost:3001/images/${movieData.image}`}
-                        alt={movieData.title}
-                        style={{ width: "100%", borderRadius: "0.7rem", background: "#151010" }}
-                    />
-                </div>
-                <div style={{ flex: 1 }}>
-                    <Link to='/' className="filter-btn" style={{ marginBottom: "2rem", display: "inline-block" }}>
-                        &lt; Movie List
-                    </Link>
-                    <h1 className="movie-title" style={{ fontSize: "2.2rem", margin: "1rem 0 0.6rem 0", textAlign: "left" }}>
-                        {movieData.title}
-                    </h1>
-                    <div className="movie-meta" style={{ fontSize: "1.1rem", marginBottom: "1.2rem", textAlign: "left" }}>
-                        <strong>Director:</strong> {movieData.director} <br />
-                        <strong>Genre:</strong> {movieData.genre}
-                    </div>
-                    <p style={{ lineHeight: "1.6", color: "#e5e1dc", fontSize: "1.08rem" }}>
-                        {movieData.description}
-                    </p>
-                </div>
-            </div>
-        </main>
-    );
+	const fetchMovie = async () => {
+		try {
+			const response = await fetch(`http://localhost:3000/api/movies/${id}`);
+			const data = await response.json();
+			setMovie(data);
+		} catch (error) {
+			console.error("Error fetching movie:", error);
+		}
+	};
+
+	const handleMovieUpdated = () => {
+		fetchMovie(); // Refresh the movie data
+	};
+
+	const handleMovieDeleted = () => {
+		navigate("/"); // Navigate back to movie list after deletion
+	};
+
+	if (!movie) {
+		return <div>Loading...</div>;
+	}
+
+	return (
+		<main>
+			<div className="container">
+				<button 
+					className={m.returnButton} 
+					onClick={() => navigate("/")}
+				>
+					← All Movies
+				</button>
+				<div className={m.movieDetail}>
+					<div className={m.imageContainer}>
+						<img
+							src={`http://localhost:3000/images/${movie.image_name}`}
+							alt={movie.name}
+						/>
+					</div>
+					<div className={m.movieInfo}>
+						<h1>{movie.name}</h1>
+						<h3>Director: {movie.director}</h3>
+						<h4>Genre: {movie.genre}</h4>
+						{movie.description && (
+							<div>
+								<h4>Description:</h4>
+								<p>{movie.description}</p>
+							</div>
+						)}
+						<div className={m.actions}>
+							<UpdateMovieModal 
+								movie={movie} 
+								onMovieUpdated={handleMovieUpdated} 
+							/>
+							<DeleteMovieModal 
+								movie={movie} 
+								onMovieDeleted={handleMovieDeleted} 
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	);
 }
 
 export default MovieDetail;

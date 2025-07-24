@@ -1,44 +1,53 @@
+//  api/routers/genre.js
 const express = require("express");
 const genreRouter = express.Router();
 const db = require("../db");
-
-// GET all unique genres from movies table (split by "/" & trim)
+     
 genreRouter.get("/", (req, res) => {
-    const sql = "SELECT DISTINCT genre FROM movies";
+    const sql = "SELECT DISTINCT genre as name FROM movie_info ORDER BY genre";
     db.query(sql, (err, results) => {
         if (err) {
             res.status(500).send(err);
             return;
         }
-        const genreSet = new Set();
-        results.forEach(row => {
-            if (row.genre && row.genre.trim() !== "") {
-                row.genre.split("/").forEach(g => {
-                    const trimmed = g.trim();
-                    if (trimmed) genreSet.add(trimmed);
-                });
-            }
-        });
-        const genres = Array.from(genreSet).map((g, idx) => ({
-            id: idx + 1,
-            name: g
+        // Add IDs manually since we can't use ROW_NUMBER in this MySQL version
+        const genresWithIds = results.map((genre, index) => ({
+            id: index + 1,
+            name: genre.name
         }));
-        res.json(genres);
+        res.json(genresWithIds);
     });
 });
 
-// POST to add a new genre (adds a dummy movie row)
+// Handle POST requests to add a new genre
 genreRouter.post('/', (req, res) => {
+
+    // Get the new genre name from the request body
     const { name } = req.body;
-    const addGenreSQL = `INSERT INTO movies (director, genre, description) VALUES ('', ?, '')`;
-    db.query(addGenreSQL, [name], (err, results) => {
+
+    if (!name) {
+        return res.status(400).json({ error: "Genre name is required" });
+    }
+
+    // Check if genre already exists
+    const checkGenreSQL = `SELECT DISTINCT genre FROM movie_info WHERE genre = ? LIMIT 1`;
+    
+    db.query(checkGenreSQL, [name], (err, results) => {
         if (err) {
             console.error(err);
             return res.status(500).send(err);
         }
+        
+        if (results.length > 0) {
+            return res.status(400).json({ error: "Genre already exists" });
+        }
+        
+        // Since we don't have a separate genres table, we'll just return success
+        // The genre will be added when a movie is created with this genre
         res.status(201).json({
-            genreId: results.insertId,
-            message: "Genre added successfully",
+            genreId: Date.now(), // Simple ID generation for demo
+            name: name,
+            message: "Genre will be available when you create a movie with this genre",
         });
     });
 });
