@@ -1,7 +1,7 @@
 // Route: web/src/pages/SignUp.jsx
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import g from '../global.module.css';
 
 // Adjust the path if the image location is different in MovieRepo
@@ -13,8 +13,10 @@ function SignUp() {
         password: '',
         confirmPassword: '',
     });
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
@@ -22,21 +24,28 @@ function SignUp() {
             return;
         }
 
-        fetch('http://localhost:3000/users/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: formData.email,
-                password: formData.password
-            })
-        }).then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // You may want to handle success/errors here, or redirect, based on future requirements
-        });
-    };    
+        try {
+            const response = await fetch('/api/users/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                setError(data.message || 'Registration failed');
+                return;
+            }
+            alert('Registration successful! Please sign in.');
+            navigate('/sign-in');
+        } catch (err) {
+            setError('Network error. Please try again.');
+        }
+    };
 
     return (
         <main style={{backgroundImage: `url(${bannerImage})`}} className={` ${g["full-width"]} ${g['banner']}`}>
@@ -45,6 +54,7 @@ function SignUp() {
                     <div className={`${g['card']} ${g['card--w-padding']}`}>
                         <h1 className={g['h1']}>Join our MovieVerse</h1>
                         <form onSubmit={handleSubmit} className={`${g['form-group']} ${g["form--full"]}`}>
+                            {error && <div style={{color: 'red', marginBottom: '1rem'}}>{error}</div>}
                             <div>
                                 <label htmlFor="email">Email</label>
                                 <input 
@@ -63,6 +73,7 @@ function SignUp() {
                                     id="password" 
                                     name="password"
                                     placeholder="Password"
+                                    autoComplete="new-password"
                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                     required
                                 />
@@ -74,6 +85,7 @@ function SignUp() {
                                     id="confirm-password" 
                                     name="confirm-password"
                                     placeholder="Retype Password"
+                                    autoComplete="new-password"
                                     onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                                     required
                                 />

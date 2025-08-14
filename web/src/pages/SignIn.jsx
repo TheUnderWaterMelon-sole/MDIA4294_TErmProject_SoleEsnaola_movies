@@ -24,7 +24,7 @@ function SignIn() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3000/users/sign-in', {
+    fetch('/api/users/sign-in', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
