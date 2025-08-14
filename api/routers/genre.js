@@ -47,7 +47,7 @@ genreRouter.post('/', (req, res) => {
       genreId: Date.now(), // Simple ID generation for demo
       name: name,
       message:
-        'Genre will be available when you create a movie with this genre',
+        'Genre has been added successfully',
     });
   });
 });
