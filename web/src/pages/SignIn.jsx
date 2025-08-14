@@ -1,9 +1,9 @@
 // Route: web/src/pages/SignIn.jsx
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import g from '../global.module.css';
-import bannerImage from '../assets/images/home-bg.jpg';
+const bannerImage = '/home-bg.jpeg';
 
 function SignIn() {
     const [loginSuccess, setLoginSuccess] = useState(false);
@@ -14,10 +14,10 @@ function SignIn() {
 
     const navigate = useNavigate();
 
-    // send the user to the /tapes page if they log in successfully
+    // send the user to the /movies page if they log in successfully
     useEffect(() => {
         if (loginSuccess) {
-            navigate('/tapes');
+            navigate('/movies');
         }
     }, [loginSuccess, navigate]);
 
@@ -83,6 +83,7 @@ function SignIn() {
                                 value='Sign In'
                                 className={`${g["button"]} ${g["success"]}`}
                             />
+                            <Link to="/" className={`${g["button"]} ${g["cancel"]}`}>Cancel</Link>
                         </form>
                     </div>
                 </div>

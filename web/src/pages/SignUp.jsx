@@ -1,10 +1,11 @@
 // Route: web/src/pages/SignUp.jsx
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import g from '../global.module.css';
 
 // Adjust the path if the image location is different in MovieRepo
-import bannerImage from '../assets/images/home-bg.jpg';
+const bannerImage = '/home-bg.jpeg';
 
 function SignUp() {
     const [formData, setFormData] = useState({
@@ -38,11 +39,11 @@ function SignUp() {
     };    
 
     return (
-        <main style={{backgroundImage: `url(${bannerImage})`}} className={`${g['container']} ${g["full-width"]} ${g['banner']}`}>
+        <main style={{backgroundImage: `url(${bannerImage})`}} className={` ${g["full-width"]} ${g['banner']}`}>
             <div className={`${g['grid-container']} ${g["banner__content"]}`}>
                 <div className={g['col-12']}>
                     <div className={`${g['card']} ${g['card--w-padding']}`}>
-                        <h1 className={g['h1']}>Register</h1>
+                        <h1 className={g['h1']}>Join our MovieVerse</h1>
                         <form onSubmit={handleSubmit} className={`${g['form-group']} ${g["form--full"]}`}>
                             <div>
                                 <label htmlFor="email">Email</label>
@@ -78,6 +79,7 @@ function SignUp() {
                                 />
                             </div>
                             <input type="submit" value="Register" className={`${g["button"]} ${g["success"]}`} />
+                            <Link to="/" className={`${g["button"]} ${g["cancel"]}`}>Cancel</Link>
                         </form>
                     </div>
                 </div>

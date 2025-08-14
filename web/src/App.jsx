@@ -1,8 +1,9 @@
 // Route: web/src/App.jsx
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Header from "./components/Header";
+import Home from "./pages/Home";
 import MovieList from "./pages/MovieList";
 import MovieDetail from "./pages/MovieDetail";
 import SignUp from "./pages/SignUp";
@@ -16,13 +17,13 @@ function App() {
 		<BrowserRouter>
 			<div className={a.app}>
 				<Header />
-				<Routes>
-					<Route path='/' element={<MovieList />} />
-					<Route path='/movies' element={<Navigate to='/' />} />
-					<Route path='/movies/:id' element={<MovieDetail />} />
-					<Route path='/sign-up' element={<SignUp />} />
-					<Route path='/sign-in' element={<SignIn />} />
-				</Routes>
+				   <Routes>
+					   <Route path='/' element={<Home />} />
+					   <Route path='/movies' element={<MovieList />} />
+					   <Route path='/movies/:id' element={<MovieDetail />} />
+					   <Route path='/sign-up' element={<SignUp />} />
+					   <Route path='/sign-in' element={<SignIn />} />
+				   </Routes>
 				<Footer />
 			</div>
 		</BrowserRouter>
