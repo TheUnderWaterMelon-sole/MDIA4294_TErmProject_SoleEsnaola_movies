@@ -13,6 +13,8 @@ function SignUp() {
         password: '',
         confirmPassword: '',
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 
@@ -66,10 +68,10 @@ function SignUp() {
                                     required
                                 />
                             </div>
-                            <div>
+                            <div style={{position: 'relative'}}>
                                 <label htmlFor="password">Password</label>
                                 <input 
-                                    type="password" 
+                                    type={showPassword ? "text" : "password"}
                                     id="password" 
                                     name="password"
                                     placeholder="Password"
@@ -77,11 +79,29 @@ function SignUp() {
                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                                     required
                                 />
+                                <span
+                                    onClick={() => setShowPassword((v) => !v)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: 12,
+                                        top: 38,
+                                        cursor: 'pointer',
+                                        fontSize: '1.2rem',
+                                        color: '#aaa',
+                                        userSelect: 'none'
+                                    }}
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                    title={showPassword ? 'Hide password' : 'Show password'}
+                                    tabIndex={0}
+                                    role="button"
+                                >
+                                    {showPassword ? '🙈' : '👁️'}
+                                </span>
                             </div>
-                            <div>
+                            <div style={{position: 'relative'}}>
                                 <label htmlFor="confirm-password">Confirm Password</label>
                                 <input 
-                                    type="password" 
+                                    type={showConfirm ? "text" : "password"}
                                     id="confirm-password" 
                                     name="confirm-password"
                                     placeholder="Retype Password"
@@ -89,6 +109,24 @@ function SignUp() {
                                     onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                                     required
                                 />
+                                <span
+                                    onClick={() => setShowConfirm((v) => !v)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: 12,
+                                        top: 38,
+                                        cursor: 'pointer',
+                                        fontSize: '1.2rem',
+                                        color: '#aaa',
+                                        userSelect: 'none'
+                                    }}
+                                    aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                                    title={showConfirm ? 'Hide password' : 'Show password'}
+                                    tabIndex={0}
+                                    role="button"
+                                >
+                                    {showConfirm ? '🙈' : '👁️'}
+                                </span>
                             </div>
                             <input type="submit" value="Register" className={`${g["button"]} ${g["success"]}`} />
                             <Link to="/" className={`${g["button"]} ${g["cancel"]}`}>Cancel</Link>

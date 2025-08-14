@@ -1,3 +1,17 @@
+.logoutButton {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 0.4rem 1.2rem;
+  color: #191716;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logoutButton:hover,
+.logoutButton:focus {
+  background: rgba(255, 255, 255, 0.7);
+}
 .cancel {
   display: block;
   margin: 1.5rem auto 0 auto;
@@ -10,7 +24,7 @@
 }
 /* Home Page Banner Styles */
 .banner {
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100vw;
   background-size: cover;
   background-position: center;
@@ -20,6 +34,8 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .banner::before {

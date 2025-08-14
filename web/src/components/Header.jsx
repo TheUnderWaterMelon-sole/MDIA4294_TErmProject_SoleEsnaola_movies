@@ -19,7 +19,7 @@ export default function Header() {
         <Link to="/" className={g.navLink}>Movies</Link>
         <a href="#" className={g.navLink}>TV Shows</a>
         <span className={g.navLink}>Blog</span>
-        <button onClick={handleLogout} className={g.navLink} style={{background:'none',border:'none',padding:0,cursor:'pointer'}}>Logout</button>
+  <button onClick={handleLogout} className={`${g.navLink} ${g.logoutButton}`}>Logout</button>
       </nav>
     </header>
   );

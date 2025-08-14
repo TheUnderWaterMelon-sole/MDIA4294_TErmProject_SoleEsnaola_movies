@@ -72,6 +72,7 @@ function SignIn() {
                                     type='password'
                                     id='password'
                                     name='password'
+                                    autoComplete='current-password'
                                     onChange={(e) =>
                                         setFormData({ ...formData, password: e.target.value })
                                     }
